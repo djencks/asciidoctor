@@ -606,11 +606,11 @@ context 'Extensions' do
 
     test 'should invoke preprocessors before parsing document' do
       input = <<~'EOS'
-      junk line
+        junk line
 
-      = Document Title
+        = Document Title
 
-      sample content
+        sample content
       EOS
 
       begin
@@ -630,11 +630,11 @@ context 'Extensions' do
 
     test 'should invoke include processor to process include directive' do
       input = <<~'EOS'
-      before
+        before
 
-      include::lorem-ipsum.txt[]
+        include::lorem-ipsum.txt[]
 
-      after
+        after
       EOS
 
       begin
@@ -655,14 +655,14 @@ context 'Extensions' do
 
     test 'should invoke include processor if it offers to handle include directive' do
       input = <<~'EOS'
-      include::skip-me.adoc[]
-      line after skip
+        include::skip-me.adoc[]
+        line after skip
 
-      include::include-file.adoc[]
+        include::include-file.adoc[]
 
-      include::fixtures/grandchild-include.adoc[]
+        include::fixtures/grandchild-include.adoc[]
 
-      last line
+        last line
       EOS
 
       registry = Asciidoctor::Extensions.create do
@@ -713,10 +713,10 @@ context 'Extensions' do
 
     test 'should invoke tree processors after parsing document' do
       input = <<~'EOS'
-      = Document Title
-      Doc Writer
+        = Document Title
+        Doc Writer
 
-      content
+        content
       EOS
 
       begin
@@ -752,10 +752,10 @@ context 'Extensions' do
 
     test 'should allow tree processor to replace tree' do
       input = <<~'EOS'
-      = Original Document
-      Doc Writer
+        = Original Document
+        Doc Writer
 
-      content
+        content
       EOS
 
       begin
@@ -772,13 +772,13 @@ context 'Extensions' do
 
     test 'should honor block title assigned in tree processor' do
       input = <<~'EOS'
-      = Document Title
-      :!example-caption:
+        = Document Title
+        :!example-caption:
 
-      .Old block title
-      ====
-      example block content
-      ====
+        .Old block title
+        ====
+        example block content
+        ====
       EOS
 
       old_title = nil
@@ -845,9 +845,9 @@ context 'Extensions' do
 
     test 'should invoke postprocessors after converting document' do
       input = <<~'EOS'
-      * one
-      * two
-      * three
+        * one
+        * two
+        * three
       EOS
 
       begin
@@ -864,7 +864,7 @@ context 'Extensions' do
 
     test 'should yield to document processor block if block has non-zero arity' do
       input = <<~'EOS'
-      hi!
+        hi!
       EOS
 
       begin
@@ -887,11 +887,11 @@ context 'Extensions' do
 
     test 'should invoke processor for custom block' do
       input = <<~'EOS'
-      [yell]
-      Hi there!
+        [yell]
+        Hi there!
 
-      [yell,chars=aeiou]
-      Hi there!
+        [yell,chars=aeiou]
+        Hi there!
       EOS
 
       begin
@@ -910,11 +910,11 @@ context 'Extensions' do
 
     test 'should invoke processor for custom block in an AsciiDoc table cell' do
       input = <<~'EOS'
-      |===
-      a|
-      [yell]
-      Hi there!
-      |===
+        |===
+        a|
+        [yell]
+        Hi there!
+        |===
       EOS
 
       begin
@@ -932,10 +932,10 @@ context 'Extensions' do
 
     test 'should yield to syntax processor block if block has non-zero arity' do
       input = <<~'EOS'
-      [eval]
-      ....
-      'yolo' * 5
-      ....
+        [eval]
+        ....
+        'yolo' * 5
+        ....
       EOS
 
       begin
@@ -957,10 +957,10 @@ context 'Extensions' do
 
     test 'should pass cloaked context in attributes passed to process method of custom block' do
       input = <<~'EOS'
-      [custom]
-      ****
-      sidebar
-      ****
+        [custom]
+        ****
+        sidebar
+        ****
       EOS
 
       cloaked_context = nil
@@ -1022,10 +1022,10 @@ context 'Extensions' do
 
     test 'should drop block macro line if target references missing attribute and attribute-missing is drop-line' do
       input = <<~'EOS'
-      [.rolename]
-      snippet::{gist-ns}12345[mode=edit]
+        [.rolename]
+        snippet::{gist-ns}12345[mode=edit]
 
-      following paragraph
+        following paragraph
       EOS
 
       begin
@@ -1050,9 +1050,9 @@ context 'Extensions' do
 
     test 'should invoke processor for custom block macro in an AsciiDoc table cell' do
       input = <<~'EOS'
-      |===
-      a|message::hi[]
-      |===
+        |===
+        a|message::hi[]
+        |===
       EOS
 
       begin
@@ -1168,9 +1168,9 @@ context 'Extensions' do
           end
         end
         input = <<~'EOS'
-        attribute::yin[yang]
+          attribute::yin[yang]
 
-        header_attribute::foo[bar]
+          header_attribute::foo[bar]
         EOS
         doc = document_from_string input
         assert_nil doc.attr 'yin'
@@ -1315,29 +1315,29 @@ context 'Extensions' do
         end
 
         input = <<~'EOS'
-        [subs=normal]
-        ++++
-        short_attributes:[]
-        short_attributes:[value,key=val]
-        short_text:[]
-        short_text:[[text\]]
-        full-attributes:target[]
-        full-attributes:target[value,key=val]
-        full-text:target[]
-        full-text:target[[text\]]
-        @target
-        ++++
+          [subs=normal]
+          ++++
+          short_attributes:[]
+          short_attributes:[value,key=val]
+          short_text:[]
+          short_text:[[text\]]
+          full-attributes:target[]
+          full-attributes:target[value,key=val]
+          full-text:target[]
+          full-text:target[[text\]]
+          @target
+          ++++
         EOS
         expected = <<~'EOS'.chop
-        target="", attributes={}
-        target="value,key=val", attributes={1=>"value", "key"=>"val", "name"=>"value"}
-        target="", attributes={"text"=>""}
-        target="[text]", attributes={"text"=>"[text]"}
-        target="target", attributes={}
-        target="target", attributes={1=>"value", "key"=>"val", "name"=>"value"}
-        target="target", attributes={"text"=>""}
-        target="target", attributes={"text"=>"[text]"}
-        target="target", attributes={}
+          target="", attributes={}
+          target="value,key=val", attributes={1=>"value", "key"=>"val", "name"=>"value"}
+          target="", attributes={"text"=>""}
+          target="[text]", attributes={"text"=>"[text]"}
+          target="target", attributes={}
+          target="target", attributes={1=>"value", "key"=>"val", "name"=>"value"}
+          target="target", attributes={"text"=>""}
+          target="target", attributes={"text"=>"[text]"}
+          target="target", attributes={}
         EOS
         output = convert_string_to_embedded input
         assert_equal expected, output
@@ -1481,13 +1481,13 @@ context 'Extensions' do
           end
         end
         input = <<~'EOS'
-        .unused title
-        [skip-me]
-        not shown
+          .unused title
+          [skip-me]
+          not shown
 
-        --
-        shown
-        --
+          --
+          shown
+          --
         EOS
         doc = document_from_string input
         assert_equal 1, doc.blocks.size
@@ -1512,13 +1512,13 @@ context 'Extensions' do
           end
         end
         input = <<~'EOS'
-        .unused title
-        [ignore]
-        not shown
+          .unused title
+          [ignore]
+          not shown
 
-        --
-        shown
-        --
+          --
+          shown
+          --
         EOS
         doc = document_from_string input
         refute process_method_called
@@ -1544,9 +1544,9 @@ context 'Extensions' do
           end
         end
         input = <<~'EOS'
-        .title
-        [foo]
-        content
+          .title
+          [foo]
+          content
         EOS
         doc = document_from_string input
         assert_equal 1, doc.blocks.size
@@ -1570,18 +1570,18 @@ context 'Extensions' do
           end
         end
         input = <<~'EOS'
-        [wrap]
-        --
-        [foo=bar]
-        ====
-        content
-        ====
+          [wrap]
+          --
+          [foo=bar]
+          ====
+          content
+          ====
 
-        [baz=qux]
-        ====
-        content
-        ====
-        --
+          [baz=qux]
+          ====
+          content
+          ====
+          --
         EOS
         doc = document_from_string input
         assert_equal 1, doc.blocks.size
@@ -1610,12 +1610,12 @@ context 'Extensions' do
           end
         end
         input = <<~'EOS'
-        :foo: bar
+          :foo: bar
 
-        [attrs]
-        --
-        a,b,c,key=val
-        --
+          [attrs]
+          --
+          a,b,c,key=val
+          --
         EOS
         convert_string_to_embedded input
         assert_equal 'a', parsed_attrs['a']
@@ -1644,11 +1644,11 @@ context 'Extensions' do
         end
 
         input_tpl = <<~'EOS'
-        = Document Title
-        :doctype: book
-        :sectnums:
+          = Document Title
+          :doctype: book
+          :sectnums:
 
-        sect::[%s]
+          sect::[%s]
         EOS
 
         {
@@ -1682,9 +1682,9 @@ context 'Extensions' do
 
     test 'should add docinfo to document' do
       input = <<~'EOS'
-      = Document Title
+        = Document Title
 
-      sample content
+        sample content
       EOS
 
       begin
@@ -1702,9 +1702,9 @@ context 'Extensions' do
 
     test 'should add multiple docinfo to document' do
       input = <<~'EOS'
-      = Document Title
+        = Document Title
 
-      sample content
+        sample content
       EOS
 
       begin
@@ -1803,8 +1803,8 @@ context 'Extensions' do
 
     test 'should assign caption on image block if title is set on custom block macro' do
       input = <<~'EOS'
-      .Cat in Sink?
-      cat_in_sink::30[]
+        .Cat in Sink?
+        cat_in_sink::30[]
       EOS
       doc = document_from_string input, standalone: false, extension_registry: create_cat_in_sink_block_macro
       output = doc.convert
@@ -1868,6 +1868,120 @@ context 'Extensions' do
       assert_xpath '/div[@class="olist"]/ol/li[@id="santa-list-pepijn"][not(@class)]', output, 1
       assert_xpath '/div[@class="olist"]/ol/li[@id="santa-list-dan"][@class="naughty"]', output, 1
       assert_xpath '/div[@class="olist"]/ol/li[not(@id)][not(@class)]/p[text()="Sarah"]', output, 1
+    end
+
+    test 'block processor should support all possible contexts' do
+      group = proc do
+        block do
+          named 'allcontexts'
+          contexts :paragraph, :open, :listing, :literal, :example, :sidebar, :quote, :pass, :table, :comment, :fenced_code
+
+          process do |parent, reader, attributes|
+            create_pass_block parent, reader.lines << attributes['cloaked-context'], attributes
+          end
+        end
+      end
+      input = <<~EOS
+[allcontexts]
+:paragraph
+
+[allcontexts]
+--
+:open
+--
+
+[allcontexts]
+----
+:listing
+----
+
+[allcontexts]
+....
+:literal
+....
+
+[allcontexts]
+====
+:example
+====
+
+[allcontexts]
+****
+:sidebar
+****
+
+[allcontexts]
+____
+:quote
+____
+
+[allcontexts]
+++++
+:pass
+++++
+
+[allcontexts]
+|===
+:table
+|===
+
+[allcontexts]
+,===
+:table
+,===
+
+[allcontexts]
+:===
+:table
+:===
+
+[allcontexts]
+!===
+:table
+!===
+
+[allcontexts]
+////
+:comment
+////
+
+[allcontexts]
+```
+:fenced_code
+```
+
+      EOS
+      doc = document_from_string input, standalone: false, extensions: group
+      output = doc.convert
+      expected = <<~EOS
+:paragraph
+paragraph
+:open
+open
+:listing
+listing
+:literal
+literal
+:example
+example
+:sidebar
+sidebar
+:quote
+quote
+:pass
+pass
+:table
+table
+:table
+table
+:table
+table
+:table
+table
+:fenced_code
+fenced_code
+EOS
+      assert_equal expected.chomp, output
     end
   end
 end
